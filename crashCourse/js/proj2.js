@@ -5,6 +5,9 @@ function init(){
     var renderer =  new THREE.WebGLRenderer();
     // setting up a clear background color
     renderer.setClearColor(0xEEEEEE);
+    renderer.setSize(window.innerWidth,window.innerHeight);
+    // enabling shadow property : remember it is costly operation.
+    renderer.shadowMapEnabled = true;
     // attaching renderer to the dom-body , without this visibility is none .
     document.body.appendChild(renderer.domElement);
     // on resizing the browser , render the image again
@@ -17,7 +20,7 @@ function init(){
             });
     
     
-    renderer.setSize(window.innerWidth,window.innerHeight);
+    
     
     // axes 
     var axes = new THREE.AxisHelper(20);
@@ -25,30 +28,33 @@ function init(){
     
     // plane
     var planeGeometry = new THREE.PlaneGeometry(60,20,1,1);
-    var planeMaterial = new THREE.MeshBasicMaterial({color:0xcccccc});
+    var planeMaterial = new THREE.MeshLambertMaterial({color:0xcccccc});
     var plane = new THREE.Mesh(planeGeometry,planeMaterial);
     plane.rotation.x = -0.5 * Math.PI;
     plane.position.x = 15;
     plane.position.y = 0;
     plane.position.z = 0;
+    plane.receiveShadow = true;
     scene.add(plane);
     
     // cube
     var cubeGeometry = new THREE.BoxGeometry(4,4,4);
-    var cubeMaterial = new THREE.MeshBasicMaterial({color:0xff0000,wireframe:true});
+    var cubeMaterial = new THREE.MeshLambertMaterial({color:0xff0000});
     var cube = new THREE.Mesh(cubeGeometry,cubeMaterial);
     cube.position.x = -4;
     cube.position.y = 3;
     cube.position.z = 0;
+    cube.castShadow = true;
     scene.add(cube);
     
     //sphere
     var sphereGeometry = new THREE.SphereGeometry(4,20,20);
-    var sphereMaterial = new THREE.MeshBasicMaterial({color:0x7777ff,wireframe:true});
+    var sphereMaterial = new THREE.MeshLambertMaterial({color:0x7777ff});
     var sphere = new THREE.Mesh(sphereGeometry,sphereMaterial);
     sphere.position.x = 20;
     sphere.position.y = 4;
     sphere.position.z = 2;
+    sphere.castShadow = true;
     scene.add(sphere);
     
     //camera positioning
@@ -62,6 +68,24 @@ function init(){
     */
     camera.lookAt(scene.position);
     
+    // adding spotLight to the scene
+    var spotLight = new THREE.SpotLight(0xffffff);
+    spotLight.position.set( -40, 60, -10 );
+    spotLight.castShadow = true;
+    scene.add( spotLight );
+    
+    function initState(){
+            var stats = new Stats();
+            stats.setMode(0);
+            stats.domElement.style.position = 'absolute';
+            stats.domElement.style.left = '0px';
+            stats.domElement.style.top = '0px';
+            document.getElementById("Stats-output")
+                .appendChild( stats.domElement );
+            return stats;
+        }
+            var stats = initState();
+    
     var update = function(){
     };
     
@@ -72,6 +96,7 @@ function init(){
     
     // run gameloop (update , render , repeat)
     var GameLoop = function(){
+        stats.update();
         requestAnimationFrame(GameLoop);
         update();
         render();
