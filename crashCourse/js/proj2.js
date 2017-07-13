@@ -4,7 +4,7 @@ function init(){
     
     var renderer =  new THREE.WebGLRenderer();
     // setting up a clear background color
-    renderer.setClearColor(0xEEEEEE);
+    renderer.setClearColor(new THREE.Color(0xEEEEEE));
     renderer.setSize(window.innerWidth,window.innerHeight);
     // enabling shadow property : remember it is costly operation.
     renderer.shadowMapEnabled = true;
@@ -85,8 +85,24 @@ function init(){
             return stats;
         }
             var stats = initState();
+    var step =0;
+    var controls =  new function(){
+        this.rotationSpeed = 0.02;
+        this.bouncingSpeed = 0.03;
+    }
+    var gui = new dat.GUI();
+    gui.add(controls,'rotationSpeed',0,0.5);
+    gui.add(controls,'bouncingSpeed',0,0.5);
     
+    // update the scene
     var update = function(){
+        cube.rotation.x += controls.rotationSpeed;
+        cube.rotation.y += controls.rotationSpeed;
+        cube.rotation.z += controls.rotationSpeed;
+        
+        step+=controls.bouncingSpeed;
+        sphere.position.x = 20+( 10*(Math.cos(step)));
+        sphere.position.y = 2 +( 10*Math.abs(Math.sin(step)));
     };
     
     // draw scene
@@ -101,7 +117,6 @@ function init(){
         update();
         render();
     };
-            
     GameLoop();
 }
 

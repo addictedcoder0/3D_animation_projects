@@ -4,7 +4,7 @@
         <title>Intro to 3.js</title>
         <script src="js/three.js"></script>
         <script src="js/libs/stats.min.js"></script>
-        
+        <script src="js/libs/dat.gui.js"></script>
         <style>
         /* set margin to 0 and overflow to hidden, to use the
 complete page */
@@ -19,17 +19,7 @@ complete page */
     <body>
         <div id="Stats-output"></div>
         <script>
-        function initState(){
-            var stats = new Stats();
-            stats.setMode(0);
-            stats.domElement.style.position = 'absolute';
-            stats.domElement.style.left = '0px';
-            stats.domElement.style.top = '0px';
-            document.getElementById("Stats-output")
-                .appendChild( stats.domElement );
-            return stats;
-        }
-            var stats = initState();
+        
         </script>
        <script src="js/proj2.js"></script>
         
